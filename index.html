@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Alpine JS Plugin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="./dist/openfeature.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+  <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div x-data x-openfeature="[CLIENT_KEY]" x-cloak>
+      <div class="p-8 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-4">
+        <h1 class="text-xl font-semibold text-gray-900">OpenFeature x DevCycle AlpineJS Feature Flags Demo App</h1>
+
+        <template x-if="$booleanFlag('boolean', false)">
+          <div class="p-4 bg-green-200 rounded-lg text-green-800">
+            <p>The 'Boolean' feature flag is <strong>enabled</strong>!</p>
+          </div>
+        </template>
+
+        <div class="p-4 bg-blue-200 rounded-lg text-blue-800">
+          <p>The 'String' feature flag says "<span class="font-bold" x-text="$stringFlag('string', 'default')"></span>"</p>
+        </div>
+
+        <template x-if="!$booleanFlag('boolean', false)">
+          <div class="p-4 bg-red-200 rounded-lg text-red-800">
+            <p>The 'Boolean' feature flag is <strong>disabled</strong>.</p>
+          </div>
+        </template>
+      </div>
+    </div>
+  </body>
+</html>
