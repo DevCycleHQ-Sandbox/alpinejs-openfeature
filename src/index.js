@@ -29,7 +29,7 @@ export default function (Alpine) {
             mobile: navigator.userAgentData?.mobile ?? false,
           },
         };
-        console.log("User: ", user);
+
         const devcycleProvider = new DevCycleProvider(`${expression}`);
 
         await OpenFeature.setContext(user);
@@ -39,16 +39,6 @@ export default function (Alpine) {
       }
     }
   );
-
-  // Alpine.magic("booleanFlag", (el, { Alpine }) => {
-  //   return (subject, defaultValue = false) =>
-  //     Alpine.store("openfeature").client
-  //       ? Alpine.store("openfeature").client.getBooleanValue(
-  //           subject,
-  //           defaultValue
-  //         )
-  //       : defaultValue;
-  // });
 
   Alpine.magic("booleanFlag", (el, { Alpine }) => {
     return (subject, defaultValue = false) => {
@@ -80,16 +70,6 @@ export default function (Alpine) {
         : localStorageValue;
     };
   });
-
-  // Alpine.magic("stringFlag", (el, { Alpine }) => {
-  //   return (subject, defaultValue) =>
-  //     Alpine.store("openfeature").client
-  //       ? Alpine.store("openfeature").client.getStringValue(
-  //           subject,
-  //           defaultValue
-  //         )
-  //       : defaultValue;
-  // });
 
   Alpine.magic("stringFlag", (el, { Alpine }) => {
     return (subject, defaultValue) => {
