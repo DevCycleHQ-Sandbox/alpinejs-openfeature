@@ -2,6 +2,9 @@ import DevCycleProvider from "@devcycle/openfeature-web-provider";
 import { OpenFeature } from "@openfeature/web-sdk";
 
 export default function (Alpine) {
+  console.warn(
+    "This plugin was created for demonstration and testing purposes only. It is not recommended to use this plugin in a production environment."
+  );
   Alpine.store("openfeature", {
     client: null,
   });

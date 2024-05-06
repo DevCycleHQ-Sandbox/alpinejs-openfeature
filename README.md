@@ -1,65 +1,22 @@
-**--- DELETE START ---**
+> [!WARNING]
+> This plugin was created for demonstration and testing purposes only. It is not recommended to use this plugin in a production environment.
 
-# Alpine JS Plugin Template
+# AlpineJS OpenFeature
 
-This is a template repository to help developers quickly build Alpine JS
-plugins.
+Add feature flags to an AlpineJS project using the OpenFeature Standard.
 
-## How to Use
-
-1. Clone the repository with the "Use this template" button on GitHub
-2. Run `npm install` to install ES Build
-3. Build your plugin
-
-### Compiling
-
-To compile the code you run `npm run build` which will create two files in the
-`/dist` directory.
-
-### Testing
-
-In this template you will find a `index.html` file that you can use for testing
-how the Alpine JS plugin works.
-
-I recommend using [vercel/serve](https://www.npmjs.com/package/serve) to serve
-this file.
-
-## Things to Change
-
-- Find and replace "PLUGIN" with the name of your plugin
-- Find and replace "FILE" with the name of your compiled file
-- Find and replace "DESCRIPTION" with a description of your plugin
-- Uncomment "index.html" in the `.gitignore` file
-
-🚨 Make sure find and replace is case sensitive
-
-If you were creating a plugin called "Alpine JS CSV" you could do the following:
-
-- "PLUGIN" to "alpinejs-csv"
-- "FILE" to "csv"
-- "DESCRIPTION" to "Transform data into a CSV with Alpine JS 📈"
-
----
-
-### License
-
-The choice of adding a license and what license is best for your project is up
-to you.
-
-[Adding a License on GitHub](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository)
-
-**--- DELETE END ---**
-
-# PLUGIN
-
-DESCRIPTION
+> [!NOTE]
+> This plugin is currently limited to only the [DevCycle Provider](https://docs.devcycle.com/sdk/client-side-sdks/javascript/javascript-openfeature).
 
 ## Install
 
 ### With a CDN
 
 ```html
-<script defer src="https://unpkg.com/PLUGIN@latest/dist/FILE.min.js"></script>
+<script
+  defer
+  src="https://unpkg.com/alpinejs-openfeature@latest/dist/openfeature.min.js"
+></script>
 
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 ```
@@ -67,27 +24,55 @@ DESCRIPTION
 ### With a Package Manager
 
 ```shell
-yarn add -D PLUGIN
+yarn add -D alpinejs-openfeature
 
-npm install -D PLUGIN
+npm install -D alpinejs-openfeature
 ```
 
 ```js
 import Alpine from "alpinejs";
-import FILE from "PLUGIN";
+import openfeature from "alpinejs-openfeature";
 
-Alpine.plugin(FILE);
+import openfeature from "alpinejs-openfeature";
+Alpine.plugin(openfeature);
 
 Alpine.start();
 ```
 
 ## Example
 
-Examples of how the plugin works.
+```html
+<div x-data x-openfeature="[DEVCYCLE_CLIENT_KEY]" x-cloak>
+  <div class="p-8 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-4">
+    <h1 class="text-xl font-semibold text-gray-900">
+      AlpineJS OpenFeature Feature Flags Demo App
+    </h1>
+    <h2>Featuring DevCycle's Web Provider</h2>
 
-## Stats
+    <template x-if="$booleanFlag('boolean', false)">
+      <div class="p-4 bg-green-200 rounded-lg text-green-800">
+        <p>The 'Boolean' feature flag is <strong>enabled</strong>!</p>
+      </div>
+    </template>
 
-![](https://img.shields.io/bundlephobia/min/PLUGIN)
-![](https://img.shields.io/npm/v/PLUGIN)
-![](https://img.shields.io/npm/dt/PLUGIN)
-![](https://img.shields.io/github/license/markmead/PLUGIN)
+    <div class="p-4 bg-blue-200 rounded-lg text-blue-800">
+      <p>
+        The 'String' feature flag says "<span
+          class="font-bold"
+          x-text="$stringFlag('string', 'default')"
+        ></span
+        >"
+      </p>
+    </div>
+
+    <template x-if="!$booleanFlag('boolean', false)">
+      <div class="p-4 bg-red-200 rounded-lg text-red-800">
+        <p>The 'Boolean' feature flag is <strong>disabled</strong>.</p>
+      </div>
+    </template>
+  </div>
+</div>
+```
+
+> [!TIP]
+> If you are building an AlpineJS plugin, consider using the [AlpineJS Plugin Template created by Mark Mead](https://github.com/markmead/alpinejs-plugin-template) that this repository is based upon.

@@ -1,22 +1,23 @@
 {
-  "name": "OpenFeature",
-  "version": "1.0.0",
-  "description": "DESCRIPTION",
+  "name": "alpinejs-openfeature",
+  "version": "0.1.0",
+  "description": "Add feature flags to an AlpineJS project using the OpenFeature Standard.",
   "keywords": [
     "Alpine",
     "Alpine JS",
     "Alpine JS Plugin",
-    "Alpine JS Plugins"
+    "Alpine JS Plugins",
+    "DevCycle",
+    "OpenFeature",
+    "Feature Flags"
   ],
-  "module": "dist/FILE.esm.js",
-  "unpkg": "dist/FILE.min.js",
+  "module": "dist/openfeature.esm.js",
+  "unpkg": "dist/openfeature.min.js",
   "scripts": {
     "build": "node scripts/build.js"
   },
   "devDependencies": {
+    "@devcycle/openfeature-web-provider": "^0.10.2",
     "esbuild": "^0.20.2"
-  },
-  "dependencies": {
-    "@devcycle/openfeature-web-provider": "^0.8.5"
   }
 }
