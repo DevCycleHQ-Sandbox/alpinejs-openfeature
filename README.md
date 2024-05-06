@@ -41,6 +41,51 @@ Alpine.start();
 
 ## Example
 
+### Setup
+
+To use this plugin, first include the x-openfeature directive within your main component element and provide your DevCycle Client Key:
+
+```html
+<div x-data x-openfeature="[DEVCYCLE_CLIENT_KEY]" x-cloak></div>
+```
+
+Replace `[DEVCYCLE_CLIENT_KEY]` with your actual DevCycle client key. This directive initializes the feature flag provider and allows the use of feature flag checks within your application.
+
+**Using Feature Flags**
+Feature flags are utilized via special magic methods `$stringFlag` and `$booleanFlag`. These methods allow you to retrieve and act upon the values of your feature flags dynamically.
+
+- **Boolean Flags**: Use `$booleanFlag('flag_key', default_value)` to evaluate a boolean flag. Here `flag_key` is the identifier for your flag, and `default_value` is the fallback value used if the flag cannot be fetched.
+- **String Flags**: Use `$stringFlag('flag_key', 'default_value')` to retrieve the value of a string flag, with similar parameters as above.
+
+```html
+<template x-if="$booleanFlag('boolean', false)">
+  <div class="p-4 bg-green-200 rounded-lg text-green-800">
+    <p>The 'Boolean' feature flag is <strong>enabled</strong>!</p>
+  </div>
+</template>
+
+<div class="p-4 bg-blue-200 rounded-lg text-blue-800">
+  <p>
+    The 'String' feature flag says "<span
+      class="font-bold"
+      x-text="$stringFlag('string', 'default')"
+    ></span
+    >"
+  </p>
+</div>
+
+<template x-if="!$booleanFlag('boolean', false)">
+  <div class="p-4 bg-red-200 rounded-lg text-red-800">
+    <p>The 'Boolean' feature flag is <strong>disabled</strong>.</p>
+  </div>
+</template>
+```
+
+**Handling Disconnections and Defaults**
+If there is a disconnection or an issue fetching the feature flags, the plugin automatically falls back to default values defined in your code. Additionally, it checks localStorage for the dvc:identified_config item to determine the status of the flag based on its key. This ensures that your application can gracefully handle missing or unavailable feature flag data and continue functioning with predefined behaviors.
+
+**Complete Example**
+
 ```html
 <div x-data x-openfeature="[DEVCYCLE_CLIENT_KEY]" x-cloak>
   <div class="p-8 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-4">
