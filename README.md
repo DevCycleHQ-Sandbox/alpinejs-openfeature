@@ -49,7 +49,6 @@ To use this plugin, first include the x-openfeature directive within your main c
 <div
   x-data
   x-openfeature:[VENDOR]='{ "key": "[CLIENT_KEY]", "options": {}}'
-  x-cloak
 ></div>
 ```
 
@@ -86,12 +85,12 @@ Feature flags are utilized via special magic methods `$stringFlag` and `$boolean
 ```
 
 **Handling Disconnections and Defaults**
-If there is a disconnection or an issue fetching the feature flags, the plugin automatically falls back to default values defined in your code. Additionally, it checks localStorage for the dvc:identified_config item to determine the status of the flag based on its key. This ensures that your application can gracefully handle missing or unavailable feature flag data and continue functioning with predefined behaviors.
+If there is a disconnection or an issue fetching the feature flags, the plugin automatically falls back to default values defined in your code. This ensures that your application can gracefully handle missing or unavailable feature flag data and continue functioning with predefined behaviors.
 
 **Complete Example**
 
 ```html
-<div x-data x-openfeature="[DEVCYCLE_CLIENT_KEY]" x-cloak>
+<div x-data x-openfeature:[VENDOR]='{ "key": "[CLIENT_KEY]", "options": {}}'>
   <div class="p-8 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-4">
     <h1 class="text-xl font-semibold text-gray-900">
       AlpineJS OpenFeature Feature Flags Demo App
