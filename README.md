@@ -43,13 +43,17 @@ Alpine.start();
 
 ### Setup
 
-To use this plugin, first include the x-openfeature directive within your main component element and provide your DevCycle Client Key:
+To use this plugin, first include the x-openfeature directive within your main component element, identify your vendor, and provide your Client Key:
 
 ```html
-<div x-data x-openfeature="[DEVCYCLE_CLIENT_KEY]" x-cloak></div>
+<div
+  x-data
+  x-openfeature:[VENDOR]='{ "key": "[CLIENT_KEY]", "options": {}}'
+  x-cloak
+></div>
 ```
 
-Replace `[DEVCYCLE_CLIENT_KEY]` with your actual DevCycle client key. This directive initializes the feature flag provider and allows the use of feature flag checks within your application.
+Replace `[VENDOR]` with the name of your vendor in all lowercase (e.g. "devcycle") and `[CLIENT_KEY]` with your relevant vendor key (e.g. DevCycle Client Key). This initializes the feature flag provider and allows the use of feature flag checks within your application.
 
 **Using Feature Flags**
 Feature flags are utilized via special magic methods `$stringFlag` and `$booleanFlag`. These methods allow you to retrieve and act upon the values of your feature flags dynamically.
