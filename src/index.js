@@ -5,8 +5,10 @@ export default function (Alpine) {
   console.warn(
     "This plugin was created for demonstration and testing purposes only. It is not recommended to use this plugin in a production environment."
   );
+
   Alpine.store("openfeature", {
-    client: null,
+    client: OpenFeature.getClient(),
+    setupComplete: false, // Add a flag to track setup completion
   });
 
   Alpine.directive(
@@ -16,93 +18,64 @@ export default function (Alpine) {
       { value, modifiers, expression },
       { Alpine, effect, evaluate, cleanup }
     ) => {
-      setUpOpenFeature().then(() => {
-        Alpine.store("openfeature", {
-          client: openFeatureClient,
-        });
-      });
+      setUpOpenFeature();
 
       async function setUpOpenFeature() {
-        const user = {
-          user_id: "user_id",
-          customData: {
-            browser: navigator.userAgentData?.brands?.[0]?.brand ?? "Unknown",
-            language: navigator.language ?? "Unknown",
-            os: navigator.userAgentData?.platform ?? "Unknown",
-            mobile: navigator.userAgentData?.mobile ?? false,
-          },
-        };
+        console.log("Setting up OpenFeature with provider:", expression);
+        let providerInfo;
+        try {
+          providerInfo = JSON.parse(expression);
+        } catch (e) {
+          console.error("Invalid JSON string in expression:", expression);
+          return;
+        }
 
-        const devcycleProvider = new DevCycleProvider(`${expression}`);
+        if (value === "devcycle") {
+          const user = {
+            user_id: "user_id",
+            customData: {
+              browser: navigator.userAgentData?.brands?.[0]?.brand ?? "Unknown",
+              language: navigator.language ?? "Unknown",
+              os: navigator.userAgentData?.platform ?? "Unknown",
+              mobile: navigator.userAgentData?.mobile ?? false,
+            },
+          };
 
-        await OpenFeature.setContext(user);
-        await OpenFeature.setProviderAndWait(devcycleProvider);
+          const devcycleProvider = new DevCycleProvider(providerInfo.key);
 
-        openFeatureClient = OpenFeature.getClient();
+          await OpenFeature.setContext(user);
+          await OpenFeature.setProviderAndWait(devcycleProvider);
+
+          openFeatureClient = OpenFeature.getClient();
+
+          Alpine.store("openfeature", {
+            client: openFeatureClient,
+            setupComplete: true, // Mark setup as complete
+          });
+        } else {
+          console.log(
+            "OpenFeature is not initialized. Please provide a valid provider."
+          );
+        }
       }
     }
   );
 
   Alpine.magic("booleanFlag", (el, { Alpine }) => {
     return (subject, defaultValue = false) => {
-      let localStorageValue = defaultValue; // Default to the passed defaultValue
-
-      try {
-        // Parse the stored JSON from localStorage
-        const storedConfig = JSON.parse(
-          localStorage.getItem("dvc:identified_config")
-        );
-
-        // Safely access the value for the given subject
-        if (
-          storedConfig &&
-          storedConfig.variables &&
-          storedConfig.variables[subject] &&
-          storedConfig.variables[subject].type === "Boolean"
-        ) {
-          localStorageValue = storedConfig.variables[subject].value;
-        }
-      } catch (error) {
-        console.error("Error parsing localStorage data:", error);
-      }
-      return Alpine.store("openfeature").client
-        ? Alpine.store("openfeature").client.getBooleanValue(
-            subject,
-            defaultValue
-          )
-        : localStorageValue;
+      return Alpine.store("openfeature").client.getBooleanValue(
+        subject,
+        defaultValue
+      );
     };
   });
 
   Alpine.magic("stringFlag", (el, { Alpine }) => {
     return (subject, defaultValue) => {
-      let localStorageValue = defaultValue; // Default to the passed defaultValue
-
-      try {
-        // Parse the stored JSON from localStorage
-        const storedConfig = JSON.parse(
-          localStorage.getItem("dvc:identified_config")
-        );
-
-        // Safely access the value for the given subject
-        if (
-          storedConfig &&
-          storedConfig.variables &&
-          storedConfig.variables[subject] &&
-          storedConfig.variables[subject].type === "String"
-        ) {
-          localStorageValue = storedConfig.variables[subject].value;
-        }
-      } catch (error) {
-        console.error("Error parsing localStorage data:", error);
-      }
-
-      return Alpine.store("openfeature").client
-        ? Alpine.store("openfeature").client.getStringValue(
-            subject,
-            defaultValue
-          )
-        : localStorageValue;
+      return Alpine.store("openfeature").client.getStringValue(
+        subject,
+        defaultValue
+      );
     };
   });
 }
